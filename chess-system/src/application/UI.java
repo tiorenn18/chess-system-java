@@ -1,5 +1,6 @@
 package application;
 
+import java.io.IOException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -31,6 +32,22 @@ public class UI {
     public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
 
     // https://stackoverflow.com/questions/2979383/java-clear-the-console
+
+    public static void clearConsole() {
+        try {
+            String os = System.getProperty("os.name").toLowerCase();
+
+            if (os.contains("win")) {
+                // Windows
+                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+            } else {
+                // Linux / macOS
+                new ProcessBuilder("clear").inheritIO().start().waitFor();
+            }
+        } catch (IOException | InterruptedException ex) {
+            System.out.println("Error clearing console: " + ex.getMessage());
+        }
+    }
 
     public static ChessPosition readChessPosition(Scanner sc) {
         try {
